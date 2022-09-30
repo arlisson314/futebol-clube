@@ -1,5 +1,5 @@
 FROM node:16.14-alpine
-WORKDIR /app-backand
+WORKDIR /app-backend
 COPY package* ./
 RUN npm install
 COPY . .
