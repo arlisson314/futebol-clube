@@ -18,21 +18,21 @@ User.init({
     allowNull: false,
   },
   username: {
-    type:  DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {
-    type:  DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   email: {
     allowNull: false,
     unique: true,
-    type:  DataTypes.STRING,
+    type: DataTypes.STRING,
   },
   password: {
     allowNull: false,
-    type:  DataTypes.STRING,
+    type: DataTypes.STRING,
   },
 }, {
   // ... Outras configs
@@ -43,7 +43,7 @@ User.init({
 });
 
 /**
-  * `Workaround` para aplicar as associations em TS: 
+  * `Workaround` para aplicar as associations em TS:
   * Associations 1:N devem ficar em uma das instâncias de modelo
   * */
 
