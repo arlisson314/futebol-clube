@@ -40,9 +40,7 @@ export default class LoginServices {
         .required()
         .error(new ErrorCustom(StatusCodes.BAD_REQUEST, 'All fields must be filled')),
     });
-
     const { error } = schema.validate(body);
-
     if (error) {
       throw error;
     }
