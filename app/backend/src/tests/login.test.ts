@@ -4,21 +4,17 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-
 import { Response } from 'superagent';
 import { StatusCodes } from 'http-status-codes';
 import User from '../database/models/userModel';
 import {loginBodyMock, userMock} from './mocks/mock'
 
 chai.use(chaiHttp);
-
 const { expect } = chai;
 
 describe('Testa a rota login', () => {
 
-  before(async () => {
-    sinon.stub(User, 'findOne').resolves(userMock)
-  })
+  before(async () => { sinon.stub(User, 'findOne').resolves(userMock) });
   after(async () => {(User.findOne as sinon.SinonStub).restore()});
   
   let chaiHttpResponse: Response;
