@@ -22,8 +22,7 @@ export default class LoginServices {
 
     await decodeHash(password, user.password);
 
-    const { id, username } = user;
-    const token = tokenGenerate({ id, username, email });
+    const token = tokenGenerate({ id: user.id, username: user.username, email });
     return { code: StatusCodes.OK, data: { token } };
   };
 

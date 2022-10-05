@@ -1,11 +1,10 @@
 import { ErrorRequestHandler } from 'express';
-import ErrorCustom from './errorCustum';
 
 const errorHandler: ErrorRequestHandler = (
-  err: ErrorCustom,
+  err,
   _req,
   res,
   _next,
-) => res.status(err.code).json(err.message);
+) => res.status(err.code).json({ message: err.message });
 
 export default errorHandler;
