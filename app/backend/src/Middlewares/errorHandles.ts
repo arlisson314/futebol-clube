@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { ErrorRequestHandler } from 'express';
 import ErrorCustom from './errorCustum';
 
-const errorHandles = (
+const errorHandler: ErrorRequestHandler = (
   err: ErrorCustom,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
+  _req,
+  res,
+  _next,
 ) => res.status(err.code).json(err.message);
 
-export default errorHandles;
+export default errorHandler;
