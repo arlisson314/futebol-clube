@@ -7,7 +7,7 @@ const decodeHash = async (password: string, hashPassword :string) => {
   if (!verify) {
     throw new ErrorCustom(
       StatusCodes.UNAUTHORIZED,
-      'Unauthorized user',
+      'Incorrect email or password',
     );
   }
 };
