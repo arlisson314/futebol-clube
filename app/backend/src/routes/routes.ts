@@ -11,5 +11,6 @@ routes.post('/login', loginController.login);
 routes.get('/login/validate', loginController.admin);
 
 routes.get('/teams', teamController.teams);
+routes.get('/teams/:id', teamController.team);
 
 export default routes;
