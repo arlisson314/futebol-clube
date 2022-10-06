@@ -1,10 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
+
 import * as joi from 'joi';
+import * as bcrypt from 'bcryptjs';
 import * as JWT from 'jsonwebtoken';
+
 import ILoginService from '../interfaces/ILoginService';
 import User from '../database/models/userModel';
 import tokenGenerate from './tokenGenerate';
-import decodeHash from './decode';
 import ErrorCustom from '../Middlewares/errorCustum';
 import ITokenPayload from '../interfaces/ItokenInfo';
 
@@ -19,9 +21,14 @@ export default class LoginServices {
       throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     }
 
-    await decodeHash(password, user.password);
+    // await decodeHash(password, user.password);
+    const verify = await bcrypt.compare(password, user.password);
+    if (!verify) {
+      throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
+    }
 
     const token = tokenGenerate({ id: user.id, username: user.username, email });
+
     return { code: StatusCodes.OK, data: { token } };
   };
 
