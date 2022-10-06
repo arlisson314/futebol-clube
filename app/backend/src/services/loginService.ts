@@ -14,12 +14,9 @@ export default class LoginServices {
   public login = async (email: string, password: string): Promise<ILoginService> => {
     LoginServices.validateLoginBody({ email, password });
 
-    const user = await this._userModel.findOne({ where: { email } });
+    const user = await this._userModel.findOne({ where: { email } }) as User;
     if (!user) {
-      throw new ErrorCustom(
-        StatusCodes.UNAUTHORIZED,
-        'Incorrect email or password',
-      );
+      throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     }
 
     await decodeHash(password, user.password);
@@ -30,7 +27,8 @@ export default class LoginServices {
 
   public admin = async (token: string): Promise<ILoginService> => {
     const { email } = JWT.verify(token, process.env.JWT_SECRET as string) as ITokenPayload;
-    const user = await this._userModel.findOne({ where: { email } });
+
+    const user = await this._userModel.findOne({ where: { email } }) as User;
     if (!user) {
       throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Unautorized User');
     }
