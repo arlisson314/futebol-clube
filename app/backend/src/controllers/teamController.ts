@@ -8,4 +8,10 @@ export default class TeamController {
     const { code, data } = await this._teamController.teams();
     return res.status(code).json(data);
   };
+
+  public team: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { code, data } = await this._teamController.team(id);
+    return res.status(code).json(data);
+  };
 }
