@@ -4,7 +4,7 @@ import * as joi from 'joi';
 import * as bcrypt from 'bcryptjs';
 import * as JWT from 'jsonwebtoken';
 
-import ILoginService from '../interfaces/ILoginService';
+import IService from '../interfaces/IServiceResponse';
 import User from '../database/models/userModel';
 import tokenGenerate from './tokenGenerate';
 import ErrorCustom from '../Middlewares/errorCustum';
@@ -13,7 +13,7 @@ import ITokenPayload from '../interfaces/ItokenInfo';
 export default class LoginServices {
   private _userModel = User;
 
-  public login = async (email: string, password: string): Promise<ILoginService> => {
+  public login = async (email: string, password: string): Promise<IService> => {
     LoginServices.validateLoginBody({ email, password });
 
     const user = await this._userModel.findOne({ where: { email } }) as User;
@@ -32,7 +32,7 @@ export default class LoginServices {
     return { code: StatusCodes.OK, data: { token } };
   };
 
-  public admin = async (token: string): Promise<ILoginService> => {
+  public admin = async (token: string): Promise<IService> => {
     const { email } = JWT.verify(token, process.env.JWT_SECRET as string) as ITokenPayload;
 
     const user = await this._userModel.findOne({ where: { email } }) as User;
