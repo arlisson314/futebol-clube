@@ -8,8 +8,8 @@ class Match extends Model {
   public homeTeamGoals!: number;
   public awayTeam!: number;
   public inProgress!: number;
-  public teamHome: {teamName: string}
-  public teamAway: {teamName: string}
+  public teamHome: { teamName: string };
+  public teamAway: { teamName: string };
 }
 
 Match.init({
@@ -44,4 +44,13 @@ Match.init({
   timestamps: false,
   underscored: true,
 });
-export default Match
+
+Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'teamHome' });
+Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'teamAway' });
+
+// OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
+// OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
+
+// Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
+// Example.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
+export default Match;
