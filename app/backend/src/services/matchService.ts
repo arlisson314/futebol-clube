@@ -15,4 +15,16 @@ export default class MatchServices {
     }) as Match[];
     return { code: StatusCodes.OK, data: matches };
   };
+
+  // public matches = async (inProgress: string): Promise<IService> => {
+  //   const query = inProgress ? JSON.parse(inProgress) : '';
+  //   const matches = await this._matchModel.findAll({
+  //     where: { inProgress: query },
+  //     include: [
+  //       { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+  //       { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+  //     ],
+  //   });
+  //   return { code: StatusCodes.OK, data: matches };
+  // };
 }
