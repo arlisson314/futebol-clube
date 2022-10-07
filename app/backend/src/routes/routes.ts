@@ -15,6 +15,7 @@ routes.get('/login/validate', loginController.admin);
 routes.get('/teams', teamController.teams);
 routes.get('/teams/:id', teamController.team);
 
+// routes.get('/matches', matchController.matches);
 routes.get('/matches', matchController.matches);
 
 export default routes;
