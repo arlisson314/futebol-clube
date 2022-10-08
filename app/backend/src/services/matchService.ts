@@ -40,8 +40,6 @@ export default class MatchServices {
     const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
 
     MatchServices.checkTeams(body.homeTeam, body.awayTeam);
-    await this.checkTeam(homeTeam);
-    await this.checkTeam(awayTeam);
     MatchServices.validateLoginBody(body);
 
     const add = await this._matchModel.create({ ...body });
@@ -58,7 +56,7 @@ export default class MatchServices {
     return { code: StatusCodes.OK, data: { message: 'Finished' } };
   };
 
-  private checkTeam = async (id: number): Promise<void> => {
+  public checkTeamExist = async (id: number): Promise<void> => {
     const team = await this._matchModel.findByPk(id);
     if (!team) {
       throw new ErrorCustom(StatusCodes.NOT_FOUND, 'There is no team with such id!');
