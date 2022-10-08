@@ -22,9 +22,7 @@ export default class MatchServices {
   public matchesByfilter = async (inProgress: string): Promise<IService> => {
     const query = (inProgress === 'true' || inProgress === 'false') ? JSON.parse(inProgress) : null;
 
-    if (query === null) {
-      throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid query');
-    }
+    if (query === null) { throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid query'); }
 
     const matches = await this._matchModel.findAll({
       where: { inProgress: query },
@@ -42,11 +40,11 @@ export default class MatchServices {
     const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
 
     MatchServices.checkTeams(body.homeTeam, body.awayTeam);
+    await this.checkTeam(homeTeam);
+    await this.checkTeam(awayTeam);
     MatchServices.validateLoginBody(body);
 
-    const add = await this._matchModel.create({
-      ...body,
-    });
+    const add = await this._matchModel.create({ ...body });
 
     return { code: StatusCodes.CREATED, data: add };
   };
@@ -58,6 +56,13 @@ export default class MatchServices {
     }
     await edit.update({ inProgress: 'false' });
     return { code: StatusCodes.OK, data: { message: 'Finished' } };
+  };
+
+  private checkTeam = async (id: number): Promise<void> => {
+    const team = await this._matchModel.findByPk(id);
+    if (!team) {
+      throw new ErrorCustom(StatusCodes.NOT_FOUND, 'There is no team with such id!');
+    }
   };
 
   static validateLoginBody = (body: unknown):void => {
