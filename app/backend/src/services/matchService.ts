@@ -40,6 +40,13 @@ export default class MatchServices {
     { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress }: IAddMatches,
   ): Promise<IService> => {
     const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
+
+    if (body.homeTeam === body.awayTeam) {
+      return {
+        code: StatusCodes.UNAUTHORIZED,
+        data: { message: 'It is not possible to create a match with two equal teams' },
+      };
+    }
     MatchServices.validateLoginBody(body);
 
     const add = await this._matchModel.create({
