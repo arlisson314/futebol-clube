@@ -1,5 +1,6 @@
 import StatusCodes from 'http-status-codes';
 import * as joi from 'joi';
+import * as JWT from 'jsonwebtoken';
 import IAddMatches from '../interfaces/IAddMatches';
 import IService from '../interfaces/IServiceResponse';
 import Match from '../database/models/matchModel';
@@ -36,9 +37,10 @@ export default class MatchServices {
 
   public addMatches = async (
     { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress }: IAddMatches,
+    token: string,
   ): Promise<IService> => {
     const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
-
+    MatchServices.authToken(token);
     MatchServices.checkTeams(body.homeTeam, body.awayTeam);
     MatchServices.validateLoginBody(body);
 
@@ -84,6 +86,17 @@ export default class MatchServices {
         StatusCodes.UNAUTHORIZED,
         'It is not possible to create a match with two equal teams',
       );
+    }
+  };
+
+  static authToken = (token: string): void => {
+    try {
+      if (!token) {
+        throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Token must be a valid token');
+      }
+      JWT.verify(token, process.env.JWT_SECRET as string);
+    } catch (error) {
+      throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Token must be a valid token');
     }
   };
 }

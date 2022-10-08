@@ -13,10 +13,11 @@ export default class MatchComtroller {
     }
 
     const body = req.body as IAddMatches;
+    const token = req.headers.authorization as string;
     if (Object.keys(body).length > 0) {
       await this._matchService.checkTeamExist(body.homeTeam);
       await this._matchService.checkTeamExist(body.awayTeam);
-      const { code, data } = await this._matchService.addMatches(body);
+      const { code, data } = await this._matchService.addMatches(body, token);
       return res.status(code).json(data);
     }
 
