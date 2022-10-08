@@ -41,12 +41,7 @@ export default class MatchServices {
   ): Promise<IService> => {
     const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
 
-    if (body.homeTeam === body.awayTeam) {
-      return {
-        code: StatusCodes.UNAUTHORIZED,
-        data: { message: 'It is not possible to create a match with two equal teams' },
-      };
-    }
+    MatchServices.checkTeams(body.homeTeam, body.awayTeam);
     MatchServices.validateLoginBody(body);
 
     const add = await this._matchModel.create({
@@ -65,7 +60,7 @@ export default class MatchServices {
     return { code: StatusCodes.OK, data: { message: 'Finished' } };
   };
 
-  static validateLoginBody = (body: unknown) => {
+  static validateLoginBody = (body: unknown):void => {
     const ERROR = new ErrorCustom(StatusCodes.BAD_REQUEST, 'All fields must be filled');
     const schema = joi.object({
       homeTeam: joi.number().required().error(ERROR),
@@ -77,6 +72,15 @@ export default class MatchServices {
     const { error } = schema.validate(body);
     if (error) {
       throw error;
+    }
+  };
+
+  static checkTeams = (team1: number, team2: number): void => {
+    if (team1 === team2) {
+      throw new ErrorCustom(
+        StatusCodes.UNAUTHORIZED,
+        'It is not possible to create a match with two equal teams',
+      );
     }
   };
 }

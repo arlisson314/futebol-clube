@@ -15,7 +15,7 @@ export default class MatchComtroller {
     }
 
     const body = req.body as IAddMatches;
-    if (Object.keys(body).length > 0 && Object.keys(body).length < 6) {
+    if (Object.keys(body).length > 0) {
       const { code, data } = await this._matchService.addMatches(body);
       return res.status(code).json(data);
     }
