@@ -1,4 +1,6 @@
 import StatusCodes from 'http-status-codes';
+import * as joi from 'joi';
+import IAddMatches from '../interfaces/IAddMatches';
 import IService from '../interfaces/IServiceResponse';
 import Match from '../database/models/matchModel';
 import Team from '../database/models/teamModel';
@@ -32,5 +34,42 @@ export default class MatchServices {
       ],
     });
     return { code: StatusCodes.OK, data: matches };
+  };
+
+  public addMatches = async (
+    { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress }: IAddMatches,
+  ): Promise<IService> => {
+    const body = { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress };
+    MatchServices.validateLoginBody(body);
+
+    const add = await this._matchModel.create({
+      ...body,
+    });
+
+    return { code: StatusCodes.CREATED, data: add };
+  };
+
+  public editMatches = async (id: string): Promise<IService> => {
+    const edit = await this._matchModel.findByPk(id) as Match;
+    if (!edit) {
+      throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid query');
+    }
+    await edit.update({ inProgress: 'false' });
+    return { code: StatusCodes.OK, data: { message: 'Finished' } };
+  };
+
+  static validateLoginBody = (body: unknown) => {
+    const ERROR = new ErrorCustom(StatusCodes.BAD_REQUEST, 'All fields must be filled');
+    const schema = joi.object({
+      homeTeam: joi.number().required().error(ERROR),
+      awayTeam: joi.number().required().error(ERROR),
+      homeTeamGoals: joi.number().required().error(ERROR),
+      awayTeamGoals: joi.number().required().error(ERROR),
+      inProgress: joi.boolean().required().error(ERROR),
+    });
+    const { error } = schema.validate(body);
+    if (error) {
+      throw error;
+    }
   };
 }
