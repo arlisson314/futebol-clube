@@ -23,7 +23,7 @@ export default class MatchServices {
   public matchesByfilter = async (inProgress: string): Promise<IService> => {
     const query = (inProgress === 'true' || inProgress === 'false') ? JSON.parse(inProgress) : null;
 
-    if (query === null) { throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid query'); }
+    if (query === null) { throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid term'); }
 
     const matches = await this._matchModel.findAll({
       where: { inProgress: query },
@@ -52,14 +52,28 @@ export default class MatchServices {
   public editMatches = async (id: string): Promise<IService> => {
     const edit = await this._matchModel.findByPk(id) as Match;
     if (!edit) {
-      throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'Invalid query');
+      throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'non-existent match');
     }
     await edit.update({ inProgress: 'false' });
     return { code: StatusCodes.OK, data: { message: 'Finished' } };
   };
 
-  public checkTeamExist = async (id: number): Promise<void> => {
-    const team = await this._matchModel.findByPk(id);
+  public updateMatches = async (
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+    id: string,
+  ): Promise<IService> => {
+    const match = await this._matchModel.findByPk(id) as Match;
+
+    if (!match) {
+      throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'non-existent match');
+    }
+    await match.update({ homeTeamGoals, awayTeamGoals });
+    return { code: StatusCodes.OK, data: { message: 'OK' } };
+  };
+
+  public checkTeamExist = async (teamId: number): Promise<void> => {
+    const team = await this._matchModel.findByPk(teamId);
     if (!team) {
       throw new ErrorCustom(StatusCodes.NOT_FOUND, 'There is no team with such id!');
     }

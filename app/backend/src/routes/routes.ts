@@ -18,5 +18,6 @@ routes.get('/teams/:id', teamController.team);
 routes.get('/matches', matchController.matches);
 routes.post('/matches', matchController.matches);
 routes.patch('/matches/:id/finish', matchController.editMatches);
+routes.patch('/matches/:id', matchController.updateMatches);
 
 export default routes;

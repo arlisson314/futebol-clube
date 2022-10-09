@@ -29,4 +29,11 @@ export default class MatchComtroller {
     const { code, data } = await this._matchService.editMatches(req.params.id);
     return res.status(code).json(data);
   };
+
+  updateMatches: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { code, data } = await this._matchService.updateMatches(homeTeamGoals, awayTeamGoals, id);
+    return res.status(code).json(data);
+  };
 }
