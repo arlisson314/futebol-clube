@@ -11,9 +11,9 @@ export default class LoginController {
     return res.status(code).json(data);
   };
 
-  public admin: RequestHandler = async (req, res) => {
+  public role: RequestHandler = async (req, res) => {
     const { authorization: token } = req.headers;
-    const { code, data } = await this._loginService.admin(token as string);
+    const { code, data } = await this._loginService.role(token as string);
     return res.status(code).json(data);
   };
 }

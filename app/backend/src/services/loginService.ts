@@ -8,20 +8,22 @@ import IService from '../interfaces/IServiceResponse';
 import User from '../database/models/userModel';
 import tokenGenerate from './tokenGenerate';
 import ErrorCustom from '../Middlewares/errorCustum';
-import ITokenPayload from '../interfaces/ItokenInfo';
 
 export default class LoginServices {
   private _userModel = User;
 
   public login = async (email: string, password: string): Promise<IService> => {
     LoginServices.validateLoginBody({ email, password });
+    // const regex = /^.*@.*\.com$/;
+    // if (!regex.test(email) || password.length < 6) {
+    //   throw new ErrorCustom(StatusCodes.BAD_REQUEST, 'All fields must be filled');
+    // }
 
     const user = await this._userModel.findOne({ where: { email } }) as User;
     if (!user) {
       throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     }
 
-    // await decodeHash(password, user.password);
     const verify = await bcrypt.compare(password, user.password);
     if (!verify) {
       throw new ErrorCustom(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
@@ -32,8 +34,8 @@ export default class LoginServices {
     return { code: StatusCodes.OK, data: { token } };
   };
 
-  public admin = async (token: string): Promise<IService> => {
-    const { email } = JWT.verify(token, process.env.JWT_SECRET as string) as ITokenPayload;
+  public role = async (token: string): Promise<IService> => {
+    const { email } = JWT.verify(token, process.env.JWT_SECRET as string) as JWT.JwtPayload;
 
     const user = await this._userModel.findOne({ where: { email } }) as User;
     if (!user) {
