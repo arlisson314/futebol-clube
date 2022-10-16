@@ -1,15 +1,24 @@
-import { StatusCodes } from 'http-status-codes';
+import StatusCodes from 'http-status-codes';
 import ILeadBoard from '../interfaces/IleadBord';
 import IService from '../interfaces/IServiceResponse';
 import Match from '../database/models/matchModel';
-import queryTeamHomes from '../interfaces/query';
+import queryTeams from '../interfaces/query';
 
 export default class LeaderBoardService {
   private _matchModel = Match;
 
   public leadBoardHome = async (): Promise<IService> => {
     const [matchs] = (await this._matchModel
-      .sequelize?.query(queryTeamHomes)) as [ILeadBoard[], unknown];
+      .sequelize?.query(queryTeams.homes)) as [ILeadBoard[], unknown];
+
+    const table = LeaderBoardService.table(matchs);
+
+    return { code: StatusCodes.OK, data: table };
+  };
+
+  public leadBoardAway = async (): Promise<IService> => {
+    const [matchs] = (await this._matchModel
+      .sequelize?.query(queryTeams.aways)) as [ILeadBoard[], unknown];
 
     const table = LeaderBoardService.table(matchs);
 
