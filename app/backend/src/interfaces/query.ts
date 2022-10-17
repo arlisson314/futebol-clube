@@ -1,7 +1,7 @@
 const tableMatches = 'TRYBE_FUTEBOL_CLUBE.matches';
 const tableTeams = 'TRYBE_FUTEBOL_CLUBE.teams';
 
-const homes = `SELECT
+const home = `SELECT
 T.team_name as name,
 SUM(
   CASE
@@ -23,7 +23,7 @@ ON M.home_team = T.id AND in_progress = false
 GROUP BY name
 ORDER BY totalPoints DESC, goalsBalance DESC, goalsFavor DESC, goalsOwn DESC;`;
 
-const aways = `SELECT
+const away = `SELECT
 T.team_name as name,
 SUM(
   CASE
@@ -45,4 +45,4 @@ ON M.away_team = T.id AND in_progress = false
 GROUP BY name
 ORDER BY totalPoints DESC, goalsBalance DESC, goalsFavor DESC, goalsOwn DESC;`;
 
-export default { homes, aways };
+export default { home, away };
