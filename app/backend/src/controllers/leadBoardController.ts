@@ -13,4 +13,9 @@ export default class leadBordController {
     const { code, data } = await this._leadBordService.leadBoardAway();
     return res.status(code).json(data);
   };
+
+  public leadBoar: RequestHandler = async (_req, res) => {
+    const { code, data } = await this._leadBordService.leadBoar();
+    return res.status(code).json(data);
+  };
 }
