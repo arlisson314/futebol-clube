@@ -25,5 +25,6 @@ routes.patch('/matches/:id', matchController.updateMatches);
 
 routes.get('/leaderboard/home', leadBordController.leadBoardHome);
 routes.get('/leaderboard/away', leadBordController.leadBoardAway);
+routes.get('/leaderboard', leadBordController.leadBoar);
 
 export default routes;
