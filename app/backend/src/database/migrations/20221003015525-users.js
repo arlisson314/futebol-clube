@@ -2,12 +2,12 @@
 
 module.exports = {
    /**
-   * @param {import('sequelize').QueryInterface} queryInterface 
-   * @param {*import('sequelize').Sequelize} Sequelize 
+   * @param {import('sequelize').QueryInterface} queryInterface
+   * @param {*import('sequelize').Sequelize} Sequelize
    */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users',
-    { 
+    {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
